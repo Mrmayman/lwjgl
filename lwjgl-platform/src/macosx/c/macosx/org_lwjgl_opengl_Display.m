@@ -65,10 +65,6 @@ static NSUInteger lastModifierFlags = 0;
 @implementation MacOSXKeyableWindow
 
 + (void) createWindow {
-	[NSApplication sharedApplication];
-	[NSApp setActivationPolicy:NSApplicationActivationPolicyRegular];
-	[NSApp activateIgnoringOtherApps:YES];
-
 	MacOSXWindowInfo *window_info = peer_info->window_info;
 	
 	int width = window_info->display_rect.size.width;
