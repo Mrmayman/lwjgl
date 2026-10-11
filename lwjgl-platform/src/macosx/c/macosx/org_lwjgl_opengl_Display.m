@@ -65,6 +65,10 @@ static NSUInteger lastModifierFlags = 0;
 @implementation MacOSXKeyableWindow
 
 + (void) createWindow {
+	[NSApplication sharedApplication];
+	[NSApp setActivationPolicy:NSApplicationActivationPolicyRegular];
+	[NSApp activateIgnoringOtherApps:YES];
+
 	MacOSXWindowInfo *window_info = peer_info->window_info;
 	
 	int width = window_info->display_rect.size.width;
@@ -795,7 +799,10 @@ JNIEXPORT jobject JNICALL Java_org_lwjgl_opengl_MacOSXDisplay_nGetCurrentDisplay
         // get bitsPerPixel
         CFStringRef pixelEncoding = CGDisplayModeCopyPixelEncoding(mode);
         
-        if(CFStringCompare(pixelEncoding, CFSTR(IO16BitDirectPixels), kCFCompareCaseInsensitive) == kCFCompareEqualTo) {
+        if(pixelEncoding == NULL) {
+            bitsPerPixel = 32;
+        }
+        else if(CFStringCompare(pixelEncoding, CFSTR(IO16BitDirectPixels), kCFCompareCaseInsensitive) == kCFCompareEqualTo) {
             bitsPerPixel = 16;
         }
         else {
@@ -856,7 +863,11 @@ JNIEXPORT void JNICALL Java_org_lwjgl_opengl_MacOSXDisplay_nGetDisplayModes(JNIE
 		
             // get bitsPerPixel
             CFStringRef pixelEncoding = CGDisplayModeCopyPixelEncoding(mode);
-            if(CFStringCompare(pixelEncoding, CFSTR(IO32BitDirectPixels), kCFCompareCaseInsensitive) == kCFCompareEqualTo) {
+
+            if(pixelEncoding == NULL) {
+                bitsPerPixel = 32;
+            }
+            else if(CFStringCompare(pixelEncoding, CFSTR(IO32BitDirectPixels), kCFCompareCaseInsensitive) == kCFCompareEqualTo) {
                 bitsPerPixel = 32;
             }
             else if(CFStringCompare(pixelEncoding, CFSTR(IO16BitDirectPixels), kCFCompareCaseInsensitive) == kCFCompareEqualTo) {

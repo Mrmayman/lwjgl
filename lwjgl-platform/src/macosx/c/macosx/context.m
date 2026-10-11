@@ -94,7 +94,9 @@ NSOpenGLPixelFormat *choosePixelFormat(JNIEnv *env, jobject pixel_format, bool g
 	{
 		CGDisplayModeRef mode = CGDisplayCopyDisplayMode(kCGDirectMainDisplay);
 		CFStringRef pixEnc = CGDisplayModeCopyPixelEncoding(mode);
-		if (CFStringCompare(pixEnc, CFSTR(IO32BitDirectPixels), kCFCompareCaseInsensitive) == kCFCompareEqualTo)
+		if(pixEnc == NULL)
+			bpp = 32;
+		else if (CFStringCompare(pixEnc, CFSTR(IO32BitDirectPixels), kCFCompareCaseInsensitive) == kCFCompareEqualTo)
 			bpp = 32;
 		else if(CFStringCompare(pixEnc, CFSTR(IO16BitDirectPixels), kCFCompareCaseInsensitive) == kCFCompareEqualTo)
 			bpp = 16;
